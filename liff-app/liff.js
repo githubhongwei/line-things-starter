@@ -173,7 +173,7 @@ function liffConnectToDevice(device) {
 
         // Get service
         device.gatt.getPrimaryService(USER_SERVICE_UUID).then(service => {
-            liffGetUserService(service);
+            // liffGetUserService(service);
         }).catch(error => {
             uiStatusError(makeErrorMsg(error), false);
         });
