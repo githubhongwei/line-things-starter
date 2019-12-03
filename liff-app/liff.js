@@ -1,8 +1,8 @@
 // User service UUID: Change this to your generated service UUID
 const USER_SERVICE_UUID         = '0273d730-0736-42db-917a-0369eebd174d'; // 每日膝
 // User service characteristics
-const LED_CHARACTERISTIC_UUID   = '0273d730-0003-42db-917a-0369eebd174d'; // 每日膝 Raw 6dof Data
-const BTN_CHARACTERISTIC_UUID   = '0273d730-0004-42db-917a-0369eebd174d'; // 每日膝 Rotation Vector
+const LED_CHARACTERISTIC_UUID   = '02730003-0736-42db-917a-0369eebd174d'; // 每日膝 Raw 6dof Data
+const BTN_CHARACTERISTIC_UUID   = '02730004-0736-42db-917a-0369eebd174d'; // 每日膝 Rotation Vector
 
 // PSDI Service UUID: Fixed value for Developer Trial
 const PSDI_SERVICE_UUID         = 'E625601E-9E55-4597-A598-76018A0D293D'; // Device ID
