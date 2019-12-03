@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Vue.js的起手式範例程式碼</title>
+    <style type="text/css">
+        body {
+        padding-top:30px;
+        }
+    </style>
+</head>
+<body> 
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!--自己隨便取一個DOM ID，此容器內將是Vue App的作用範圍-->
+                <div id="myApp"> 
+                    {{ message }} <!--直接顯示資料message-->
+                    <div v-text="message"></div> <!--v-text單向綁定資料message，效果和上面一樣都是當做純文字顯示-->
+                    <div v-html="message"></div> <!--v-html單向綁定資料message，以html方式顯示-->
+                    <hr />
+                    <ul v-if="init_users.length>0">
+                        <!--使用v-for跑迴圈-->
+                        <li v-for="(user , index) in init_users" v-text="(user.username+' '+user.email)"></li>
+                    </ul>
+                    <hr />
+                    <!--使用v-on監聽JS事件-->
+                    <button class="btn btn-primary" v-on:click="MyAjaxFunction">發出Ajax</button>
+                    <ul v-if="users.length>0">
+                        <!--如果users集合有資料才渲染<ul>元素，否則移除-->
+                        <!--使用v-for跑迴圈-->
+                        <li v-for="(user , index) in users">
+                            <!--v-bind專門單向綁定DOM元素的Attribute-->
+                            <a href="#" v-bind:title="user.email" v-text="user.username"></a>
+                        </li>
+                    </ul>
+                    <hr />
+                    <!--單獨一個checkbox，打勾不打勾，值會自動為true or false-->
+                    <div class="custom-control custom-checkbox">
+                        <!--使用v-model為表單欄位<input>、<select>、<textarea>做雙向綁定-->
+                        <input type="checkbox" class="custom-control-input" name="myCheckBox" id="myCheckBox" v-model="isChecked" />
+                        <label class="custom-control-label" for="myCheckBox">點擊我</label>
+                    </div>
+                    <div v-if="isChecked===true" v-text="(msg+' 渲染 by v-if')"></div> <!--v-if如果為true就渲染此DOM元素，否則從畫面上移除DOM元素-->
+                    <div v-show="isChecked===true" v-text="(msg+' 顯示 by v-show')"></div> <!--v-show如果為true就顯示此DOM元素，否則display:none;隱藏-->
+                    <hr />
+                    <!--多個checkbox，必須給值，打勾不打勾，由值決定-->
+                    <div class="custom-control custom-checkbox">
+                        <!--多個checkbox，必須雙向綁定集合陣列-->
+                        <input type="checkbox" class="custom-control-input" name="myCheckBox1" id="myCheckBox1" value="碼農" v-model="jobs" />
+                        <label class="custom-control-label" for="myCheckBox1">碼農</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <!--使用v-model為表單欄位<input>、<select>、<textarea>做雙向綁定-->
+                        <input type="checkbox" class="custom-control-input" name="myCheckBox2" id="myCheckBox2" value="打字員" v-model="jobs" />
+                        <label class="custom-control-label" for="myCheckBox2">打字員</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <!--使用v-model為表單欄位<input>、<select>、<textarea>做雙向綁定-->
+                        <input type="checkbox" class="custom-control-input" name="myCheckBox3" id="myCheckBox3" value="工程師" v-model="jobs" />
+                        <label class="custom-control-label" for="myCheckBox3">工程師</label>
+                    </div>
+                    <div>
+                        您的職業勾選了：
+                        <!--如果jobs集合有資料才渲染<ul>元素，否則移除-->
+                        <ul v-if="jobs.length>0">
+                            <li v-for="(job ,index) in jobs" v-text="job"></li>
+                        </ul>
+                    </div>
+                    <hr />
+
+              <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input"  id="userSexMale" name="Sex" value="男" v-model="Sex" />
+                  <label class="custom-control-label" for="userSexMale">男</label>
+               </div>
+               <div class="custom-control custom-radio">
+                 <input type="radio" class="custom-control-input"  name="Sex" id="userSexFemale"  value="女" v-model="Sex" />
+                 <label class="custom-control-label" for="userSexFemale">女</label>
+			   </div>
+               <div>
+				  你的性別是： {{ Sex }}
+			   </div>
+				  <hr />
+                    <!--此區塊將使用Ajax方式登入-->
+                    <form class="form-row">
+                        <div class="col-3">
+                            <input type="text" class="form-control" v-model="user.account" name="useranme" placeholder="請輸入帳號" />
+                        </div>
+                        <div class="col-3">
+                            <input type="password" class="form-control" v-model="user.pd" name="pd" placeholder="請輸入密碼" />
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-info" type="button" v-on:click="loginFunc">模擬登入</button>
+                        </div>
+                        <div class="col-4">
+                            <!-- 登入結果-->
+                            <div v-text="loginResult"></div>
+                        </div>
+                    </form>
+                    <hr />
+                    <button class="btn btn-info" id="btnGetDataFromVue">從jQuery取得Vue App的資料</button>
+                    <div id="divJQueryResult"></div>
+                    <hr />
+                    <button class="btn btn-info" id="btnCallVueFunc">從jQuery呼叫Vue App的function</button>
+                    <!--顯示jqText的資料-->
+                    <div v-text="jqText"></div>
+                    <hr />
+                    <div>
+                        <!-- 事件修飾符prevent：https://cn.vuejs.org/v2/guide/events.html#%E4%BA%8B%E4%BB%B6%E4%BF%AE%E9%A5%B0%E7%AC%A6-->
+                        <a href="https://www.google.com.tw" v-on:click.prevent="a_Func">Google超連結</a>
+                    </div>
+                    <form action="/Home/Vue" method="post">
+                        <!--.prevent修飾符也可以阻止submit預設提交行為-->
+                        <input type="submit" class="btn btn-primary" value="提交" v-on:click.prevent="a_Func" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <!-- 引用Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+    <script type="text/javascript"> 
+        //let init_users = @Html.Raw(ViewData["users"]); //我使用的是ASP.net Core 2.1實作範例，才會有此@Html.Raw(ViewData["users"])玩意兒
+        //let loginUrl = "@Url.Action("Login", "Home")";//@@Url.Action也是ASP.net Core 2.1 Razor View的東西，和Vue.js無關
+          let loginUrl = "/Home/Login";//模擬登入的Url
+
+
+
+        //假裝這是後端預先準備的Json資料
+        let init_users = [
+            {
+                "id": 1, 
+                "username": "Bret",
+                "email": "Sincere@april.biz" 
+            },
+            {
+                "id": 2, 
+                "username": "Antonette",
+                "email": "Shanna@melissa.tv" 
+            }];
+        let app = new Vue({
+            el: '#myApp',/*定義Vue作用範圍，el指的是element，此屬性必填*/
+            data: {//data是關鍵字
+                message: `<a href="#">Hello Vue!</a>`,
+                msg: "我被打勾",
+                users: [],
+                mydata: "from vue",
+                isChecked: false,
+                jobs: ["工程師"],//預設多個checkbox當中，會事先打勾工程師的項目，如果這裡預設jobs集合裡都沒有給值的話，網頁一載入剛開始的多個checkbox就都不會打勾
+                Sex :"",
+                init_users: init_users,//假裝把後端資料指派給init_users data
+                jqText: "",//到時候會顯示從jQuery叫用的文字
+                user: { //登入發出Ajax要用的物件
+                    account: "",
+                    pd:""
+                },
+                loginResult:""//登入結果
+            },
+            methods: { //methods是關鍵字，通常處理和用戶的互動事件，底下function，不可使用()=>箭頭函式宣告，否則this指向的對象是錯誤的
+                MyAjaxFunction: function () {
+                    let vm = this;//this指的是app變數，也可以當做ViewModel
+
+                    $.ajax({ //Vue.js不像Angular內建Ajax API，Vue.js也並不限制使用哪個ajax框架，所以可以借用jQuery Ajax來呼叫
+                        url: "https://jsonplaceholder.typicode.com/users", 
+                        method: "get",
+                        //data: { mydata: vm.mydata }, //也可以把ViewModel的資料送到後端
+                        dataType: "json",//上面網址回傳json格式資料
+                        success: function (users) {
+                            vm.users = users; //AngularJS還得額外呼叫$scope.apply();來套用ViewModel的變更，Vue.js則不用
+                        }
+                    });
+                },
+                loginFunc: function () {//登入
+                    let vm = this;
+                    /*$.ajax({
+                        url: loginUrl,
+                        method: "post",
+                        data: vm.user,//直接傳遞ViewModel的物件
+                        success: function (text) {
+                            vm.loginResult=text;
+                        }
+                    });*/
+                    vm.loginResult = `您輸入的帳密為 ${vm.user.account} / ${vm.user.pd}`;
+                },
+                a_Func: function () {
+                    /*v-on:click.prevent*/
+                    /*prevent修飾符用途和jQuery的preventDefault()一樣，防止預設行為發生*/
+                    /*另外也有表單輸入綁定的修飾符也不錯用：https://cn.vuejs.org/v2/guide/forms.html#%E4%BF%AE%E9%A5%B0%E7%AC%A6 */
+
+                    /*此function要寫什麼code，自由料理*/
+
+                },
+                MyVueFunction: function (text)
+                {
+                    this.jqText = text; //從jQuery指派給Vue App的資料
+                }
+            }
+        });
+
+
+        /*以下是jQuery的世界*/
+        $(function () {
+            $("#btnGetDataFromVue").on("click", function ( ) {
+                let message = app.message;//取得ViewModel的資料
+                $("#divJQueryResult").html(message);
+            });
+            $("#btnCallVueFunc").on("click", function () {
+                //呼叫Vue.js的function
+                app.MyVueFunction("來自jQuery的字串");  
+            });
+        });
+    </script>
+</body>
+</html>
