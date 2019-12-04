@@ -1,6 +1,14 @@
-import { GattService, GattCharacteristic } from './gatt';
-
 // Data
+const GattService = {
+    DailyKnee: { UUID: '0273d730-0736-42db-917a-0369eebd174d' },
+    DK_DeviceId: { UUID: 'E625601E-9E55-4597-A598-76018A0D293D' }   //TODO: usage?
+}
+
+const GattCharacteristic = {
+    DK_Six_Dof: { UUID: '02730003-0736-42db-917a-0369eebd174d' },
+    DK_Rotation_Vector: { UUID: '02730004-0736-42db-917a-0369eebd174d' },
+    DK_DeviceId: { UUID: '26E2B12B-85F0-4F3F-9FDD-91D114270E6E' }   //TODO: usage?
+}
 
 // -------------- //
 // On window load //
@@ -17,6 +25,12 @@ window.onload = () => {
 // ------------ //
 // UI functions //
 // ------------ //
+
+function uiChangeStatusText(text) {
+    const elStatus = document.getElementById("status");
+    elStatus.innerText = text;
+    elStatus.classList.remove("hidden");
+}
 
 function uiToggleDeviceConnected(connected) {
     const elStatus = document.getElementById("status");
@@ -82,21 +96,20 @@ function makeErrorMsg(errorObj) {
 // -------------- //
 
 function initializeApp() {
-    liff.init(() => initializeLiff(), displayGeneralError);
-}
-
-function displayGeneralError(error) {
-    uiStatusError(makeErrorMsg(error), false);
+    liff.init(() => initializeLiff(), error => uiStatusError(makeErrorMsg(error), false));
 }
 
 function initializeLiff() {
     liff.initPlugins(['bluetooth']).then(() => {
         liffCheckAvailablityAndDo(() => liffRequestDevice());
-    }).catch(displayGeneralError);
+    }).catch(error => {
+        uiStatusError(makeErrorMsg(error), false);
+    });
 }
 
 function liffCheckAvailablityAndDo(callbackIfAvailable) {
     // Check Bluetooth availability
+    uiChangeStatusText("Checking Bluetooth availability...");
     liff.bluetooth.getAvailability().then(isAvailable => {
         if (isAvailable) {
             uiToggleDeviceConnected(false);
@@ -105,16 +118,22 @@ function liffCheckAvailablityAndDo(callbackIfAvailable) {
             uiStatusError("Bluetooth not available", true);
             setTimeout(() => liffCheckAvailablityAndDo(callbackIfAvailable), 10000);
         }
-    }).catch(displayGeneralError);
+    }).catch(error => {
+        uiStatusError(makeErrorMsg(error), false);
+    });
 }
 
 function liffRequestDevice() {
+    uiChangeStatusText("Requesting device...");
     liff.bluetooth.requestDevice().then(device => {
         liffConnectToDevice(device);
-    }).catch(displayGeneralError);
+    }).catch(error => {
+        uiStatusError(makeErrorMsg(error), false);
+    });
 }
 
 function liffConnectToDevice(device) {
+    uiChangeStatusText("Connecting device...");
     device.gatt.connect().then(() => {
         document.getElementById("device-name").innerText = device.name;
         document.getElementById("device-id").innerText = device.id;
@@ -125,7 +144,9 @@ function liffConnectToDevice(device) {
         // Get service
         device.gatt.getPrimaryService(GattService.DailyKnee.UUID).then(service => {
             liffGetUserService(service);
-        }).catch(displayGeneralError);
+        }).catch(error => {
+            uiStatusError(makeErrorMsg(error), false);
+        });
 
         // Device disconnect callback
         const disconnectCallback = () => {
@@ -142,14 +163,18 @@ function liffConnectToDevice(device) {
         };
 
         device.addEventListener('gattserverdisconnected', disconnectCallback);
-    }).catch(displayGeneralError);
+    }).catch(error => {
+        uiStatusError(makeErrorMsg(error), false);
+    });
 }
 
 function liffGetUserService(service) {
     // [DailyKnee] 6-dof data
     service.getCharacteristic(GattCharacteristic.DK_Six_Dof.UUID).then(characteristic => {
         liffGetDkSixDofCharacteristic(characteristic);
-    }).catch(displayGeneralError);
+    }).catch(error => {
+        uiStatusError(makeErrorMsg(error), false);
+    });
 }
 
 function liffGetDkSixDofCharacteristic(characteristic) {
@@ -162,5 +187,7 @@ function liffGetDkSixDofCharacteristic(characteristic) {
 
             //TODO: real data not extracted yet.
         });
-    }).catch(displayGeneralError);
+    }).catch(error => {
+        uiStatusError(makeErrorMsg(error), false);
+    });
 }
