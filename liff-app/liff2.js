@@ -14,10 +14,6 @@ const GattCharacteristic2 = {
 // On window load //
 // -------------- //
 
-// window.onload = () => {
-    // initializeApp2();
-// };
-
 // ----------------- //
 // Handler functions //
 // ----------------- //
@@ -96,20 +92,7 @@ function makeErrorMsg2(errorObj) {
 // LIFF functions //
 // -------------- //
 
-function initializeApp2() {
-    liff.init(() => initializeLiff2(), error => uiStatusError2(makeErrorMsg2(error), false));
-}
-
-function initializeLiff2() {
-    liff.initPlugins(['bluetooth']).then(() => {
-        liffCheckAvailablityAndDo2(() => liffRequestDevice2());
-    }).catch(error => {
-        uiStatusError2(makeErrorMsg2(error), false);
-    });
-}
-
 function liffCheckAvailablityAndDo2(callbackIfAvailable2) {
-    alert("liffCheckAvailablityAndDo2");
     // Check Bluetooth availability
     uiChangeStatusText2("Checking Bluetooth availability...");
     liff.bluetooth.getAvailability().then(isAvailable => {

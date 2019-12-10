@@ -110,7 +110,6 @@ function initializeLiff() {
 }
 
 function liffCheckAvailablityAndDo(callbackIfAvailable) {
-    alert("liffCheckAvailablityAndDo");
     // Check Bluetooth availability
     uiChangeStatusText("Checking Bluetooth availability...");
     liff.bluetooth.getAvailability().then(isAvailable => {
