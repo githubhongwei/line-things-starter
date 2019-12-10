@@ -15,6 +15,7 @@ const GattCharacteristic2 = {
 // -------------- //
 
 window.onload = () => {
+    alert("device2");
     initializeApp2();
 };
 
