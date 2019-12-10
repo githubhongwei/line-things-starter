@@ -97,7 +97,6 @@ function makeErrorMsg2(errorObj) {
 // -------------- //
 
 function initializeApp2() {
-    alert("initializeApp2");
     liff.init(() => initializeLiff2(), error => uiStatusError2(makeErrorMsg2(error), false));
 }
 
@@ -110,6 +109,7 @@ function initializeLiff2() {
 }
 
 function liffCheckAvailablityAndDo2(callbackIfAvailable2) {
+    alert("liffCheckAvailablityAndDo2");
     // Check Bluetooth availability
     uiChangeStatusText2("Checking Bluetooth availability...");
     liff.bluetooth.getAvailability().then(isAvailable => {
