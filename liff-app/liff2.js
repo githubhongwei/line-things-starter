@@ -1,10 +1,10 @@
 // Data
-const GattService = {
+const GattService2 = {
     DailyKnee: { UUID: '0273d730-0736-42db-917a-0369eebd174d' },
     DK_DeviceId: { UUID: 'E625601E-9E55-4597-A598-76018A0D293D' }   //TODO: usage?
 }
 
-const GattCharacteristic = {
+const GattCharacteristic2 = {
     DK_Six_Dof: { UUID: '02730003-0736-42db-917a-0369eebd174d' },
     DK_Rotation_Vector: { UUID: '02730004-0736-42db-917a-0369eebd174d' },
     DK_DeviceId: { UUID: '26E2B12B-85F0-4F3F-9FDD-91D114270E6E' }   //TODO: usage?
@@ -143,7 +143,7 @@ function liffConnectToDevice2(device) {
         uiToggleDeviceConnected2(true);
 
         // Get service
-        device.gatt.getPrimaryService(GattService.DailyKnee.UUID).then(service => {
+        device.gatt.getPrimaryService(GattService2.DailyKnee.UUID).then(service => {
             liffGetUserService2(service);
         }).catch(error => {
             uiStatusError2(makeErrorMsg2(error), false);
@@ -171,7 +171,7 @@ function liffConnectToDevice2(device) {
 
 function liffGetUserService2(service) {
     // [DailyKnee] 6-dof data
-    service.getCharacteristic(GattCharacteristic.DK_Six_Dof.UUID).then(characteristic => {
+    service.getCharacteristic(GattCharacteristic2.DK_Six_Dof.UUID).then(characteristic => {
         liffGetDkSixDofCharacteristic2(characteristic);
     }).catch(error => {
         uiStatusError2(makeErrorMsg2(error), false);
