@@ -15,7 +15,7 @@ const GattCharacteristic = {
 // -------------- //
 
 window.onload = () => {
-    initializeApp();
+    initializeApp2();
 };
 
 // ----------------- //
@@ -26,21 +26,22 @@ window.onload = () => {
 // UI functions //
 // ------------ //
 
-function uiChangeStatusText(text) {
-    const elStatus = document.getElementById("status");
+
+function uiChangeStatusText2(text) {
+    const elStatus = document.getElementById("status2");
     elStatus.innerText = text;
     elStatus.classList.remove("hidden");
 }
 
-function uiToggleDeviceConnected(connected) {
-    const elStatus = document.getElementById("status");
-    const elControls = document.getElementById("controls");
+function uiToggleDeviceConnected2(connected) {
+    const elStatus = document.getElementById("status2");
+    const elControls = document.getElementById("controls2");
 
     elStatus.classList.remove("error");
 
     if (connected) {
         // Hide loading animation
-        uiToggleLoadingAnimation(false);
+        uiToggleLoadingAnimation2(false);
         // Show status connected
         elStatus.classList.remove("inactive");
         elStatus.classList.add("success");
@@ -49,7 +50,7 @@ function uiToggleDeviceConnected(connected) {
         elControls.classList.remove("hidden");
     } else {
         // Show loading animation
-        uiToggleLoadingAnimation(true);
+        uiToggleLoadingAnimation2(true);
         // Show status disconnected
         elStatus.classList.remove("success");
         elStatus.classList.add("inactive");
@@ -59,8 +60,8 @@ function uiToggleDeviceConnected(connected) {
     }
 }
 
-function uiToggleLoadingAnimation(isLoading) {
-    const elLoading = document.getElementById("loading-animation");
+function uiToggleLoadingAnimation2(isLoading) {
+    const elLoading = document.getElementById("loading-animation2");
 
     if (isLoading) {
         // Show loading animation
@@ -71,11 +72,11 @@ function uiToggleLoadingAnimation(isLoading) {
     }
 }
 
-function uiStatusError(message, showLoadingAnimation) {
-    uiToggleLoadingAnimation(showLoadingAnimation);
+function uiStatusError2(message, showLoadingAnimation) {
+    uiToggleLoadingAnimation2(showLoadingAnimation);
 
-    const elStatus = document.getElementById("status");
-    const elControls = document.getElementById("controls");
+    const elStatus = document.getElementById("status2");
+    const elControls = document.getElementById("controls2");
 
     // Show status error
     elStatus.classList.remove("success");
@@ -87,7 +88,7 @@ function uiStatusError(message, showLoadingAnimation) {
     elControls.classList.add("hidden");
 }
 
-function makeErrorMsg(errorObj) {
+function makeErrorMsg2(errorObj) {
     return "Error\n" + errorObj.code + "\n" + errorObj.message;
 }
 
@@ -95,90 +96,90 @@ function makeErrorMsg(errorObj) {
 // LIFF functions //
 // -------------- //
 
-function initializeApp() {
-    liff.init(() => initializeLiff(), error => uiStatusError(makeErrorMsg(error), false));
+function initializeApp2() {
+    liff.init(() => initializeLiff2(), error => uiStatusError2(makeErrorMsg2(error), false));
 }
 
-function initializeLiff() {
+function initializeLiff2() {
     liff.initPlugins(['bluetooth']).then(() => {
-        liffCheckAvailablityAndDo(() => liffRequestDevice());
+        liffCheckAvailablityAndDo2(() => liffRequestDevice2());
     }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
+        uiStatusError2(makeErrorMsg2(error), false);
     });
 }
 
-function liffCheckAvailablityAndDo(callbackIfAvailable) {
+function liffCheckAvailablityAndDo2(callbackIfAvailable2) {
     // Check Bluetooth availability
-    uiChangeStatusText("Checking Bluetooth availability...");
+    uiChangeStatusText2("Checking Bluetooth availability...");
     liff.bluetooth.getAvailability().then(isAvailable => {
         if (isAvailable) {
-            uiToggleDeviceConnected(false);
-            callbackIfAvailable();
+            uiToggleDeviceConnected2(false);
+            callbackIfAvailable2();
         } else {
-            uiStatusError("Bluetooth not available", true);
-            setTimeout(() => liffCheckAvailablityAndDo(callbackIfAvailable), 10000);
+            uiStatusError2("Bluetooth not available", true);
+            setTimeout(() => liffCheckAvailablityAndDo2(callbackIfAvailable2), 10000);
         }
     }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
+        uiStatusError2(makeErrorMsg2(error), false);
     });
 }
 
-function liffRequestDevice() {
-    uiChangeStatusText("Requesting device...");
+function liffRequestDevice2() {
+    uiChangeStatusText2("Requesting device...");
     liff.bluetooth.requestDevice().then(device => {
-        liffConnectToDevice(device);
+        liffConnectToDevice2(device);
     }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
+        uiStatusError2(makeErrorMsg2(error), false);
     });
 }
 
-function liffConnectToDevice(device) {
-    uiChangeStatusText("Connecting device...");
+function liffConnectToDevice2(device) {
+    uiChangeStatusText2("Connecting device...");
     device.gatt.connect().then(() => {
-        document.getElementById("device-name").innerText = device.name;
-        document.getElementById("device-id").innerText = device.id;
+        document.getElementById("device-name2").innerText = device.name;
+        document.getElementById("device-id2").innerText = device.id;
 
         // Show status connected
-        uiToggleDeviceConnected(true);
+        uiToggleDeviceConnected2(true);
 
         // Get service
         device.gatt.getPrimaryService(GattService.DailyKnee.UUID).then(service => {
-            liffGetUserService(service);
+            liffGetUserService2(service);
         }).catch(error => {
-            uiStatusError(makeErrorMsg(error), false);
+            uiStatusError2(makeErrorMsg2(error), false);
         });
 
         // Device disconnect callback
-        const disconnectCallback = () => {
+        const disconnectCallback2 = () => {
             // Show status disconnected
-            uiToggleDeviceConnected(false);
+            uiToggleDeviceConnected2(false);
 
             // Remove disconnect callback
-            device.removeEventListener('gattserverdisconnected', disconnectCallback);
+            device.removeEventListener('gattserverdisconnected', disconnectCallback2);
 
             // Reset data & UI
 
             // Try to reconnect
-            initializeLiff();
+            initializeLiff2();
         };
 
-        device.addEventListener('gattserverdisconnected', disconnectCallback);
+        device.addEventListener('gattserverdisconnected', disconnectCallback2);
     }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
+        uiStatusError2(makeErrorMsg2(error), false);
     });
 }
 
-function liffGetUserService(service) {
+function liffGetUserService2(service) {
     // [DailyKnee] 6-dof data
     service.getCharacteristic(GattCharacteristic.DK_Six_Dof.UUID).then(characteristic => {
-        liffGetDkSixDofCharacteristic(characteristic);
+        liffGetDkSixDofCharacteristic2(characteristic);
     }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
+        uiStatusError2(makeErrorMsg2(error), false);
     });
 }
 
-function liffGetDkSixDofCharacteristic(characteristic) {
-    var rawDataText = document.getElementById("device-raw-data");
+function liffGetDkSixDofCharacteristic2(characteristic) {
+    var rawDataText = document.getElementById("device-raw-data2");
     // Add notification hook
     characteristic.startNotifications().then(() => {
         characteristic.addEventListener('characteristicvaluechanged', e => {
@@ -188,6 +189,6 @@ function liffGetDkSixDofCharacteristic(characteristic) {
             //TODO: real data not extracted yet.
         });
     }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
+        uiStatusError2(makeErrorMsg2(error), false);
     });
 }
