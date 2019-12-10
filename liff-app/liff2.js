@@ -14,10 +14,9 @@ const GattCharacteristic2 = {
 // On window load //
 // -------------- //
 
-window.onload = () => {
-    alert("device2");
-    initializeApp2();
-};
+// window.onload = () => {
+    // initializeApp2();
+// };
 
 // ----------------- //
 // Handler functions //
@@ -98,6 +97,7 @@ function makeErrorMsg2(errorObj) {
 // -------------- //
 
 function initializeApp2() {
+    alert("initializeApp2");
     liff.init(() => initializeLiff2(), error => uiStatusError2(makeErrorMsg2(error), false));
 }
 

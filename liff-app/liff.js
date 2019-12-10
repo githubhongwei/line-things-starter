@@ -15,8 +15,8 @@ const GattCharacteristic = {
 // -------------- //
 
 window.onload = () => {
-    alert("device1");
     initializeApp();
+	initializeApp2();
 };
 
 // ----------------- //
@@ -97,6 +97,7 @@ function makeErrorMsg(errorObj) {
 // -------------- //
 
 function initializeApp() {
+    alert("initializeApp");
     liff.init(() => initializeLiff(), error => uiStatusError(makeErrorMsg(error), false));
 }
 
