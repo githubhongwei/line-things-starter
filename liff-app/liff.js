@@ -26,15 +26,15 @@ window.onload = () => {
 // UI functions //
 // ------------ //
 
-function uiChangeStatusText(text) {
-    const elStatus = document.getElementById("status");
+function uiChangeStatusText(text, id) {
+    const elStatus = document.getElementById("status"+id);
     elStatus.innerText = text;
     elStatus.classList.remove("hidden");
 }
 
-function uiToggleDeviceConnected(connected) {
-    const elStatus = document.getElementById("status");
-    const elControls = document.getElementById("controls");
+function uiToggleDeviceConnected(connected, id) {
+    const elStatus = document.getElementById("status"+id);
+    const elControls = document.getElementById("controls"+id);
 
     elStatus.classList.remove("error");
 
@@ -59,8 +59,8 @@ function uiToggleDeviceConnected(connected) {
     }
 }
 
-function uiToggleLoadingAnimation(isLoading) {
-    const elLoading = document.getElementById("loading-animation");
+function uiToggleLoadingAnimation(isLoading, id) {
+    const elLoading = document.getElementById("loading-animation"+id);
 
     if (isLoading) {
         // Show loading animation
@@ -71,11 +71,11 @@ function uiToggleLoadingAnimation(isLoading) {
     }
 }
 
-function uiStatusError(message, showLoadingAnimation) {
+function uiStatusError(message, showLoadingAnimation, id) {
     uiToggleLoadingAnimation(showLoadingAnimation);
 
-    const elStatus = document.getElementById("status");
-    const elControls = document.getElementById("controls");
+    const elStatus = document.getElementById("status"+id);
+    const elControls = document.getElementById("controls"+id);
 
     // Show status error
     elStatus.classList.remove("success");
@@ -124,7 +124,8 @@ function liffCheckAvailablityAndDo(callbackIfAvailable) {
 }
 
 function liffRequestDevice() {
-    uiChangeStatusText("Requesting device...");
+    uiChangeStatusText("Requesting device...", "");
+	uiChangeStatusText("Requesting device...", "-2");
     liff.bluetooth.requestDevice().then(device => {
         liffConnectToDevice(device);
     }).catch(error => {
@@ -132,11 +133,11 @@ function liffRequestDevice() {
     });
 }
 
-function liffConnectToDevice(device) {
+function liffConnectToDevice(device, id) {
     uiChangeStatusText("Connecting device...");
     device.gatt.connect().then(() => {
-        document.getElementById("device-name").innerText = device.name;
-        document.getElementById("device-id").innerText = device.id;
+        document.getElementById("device-name"+id).innerText = device.name;
+        document.getElementById("device-id"+id).innerText = device.id;
 
         // Show status connected
         uiToggleDeviceConnected(true);
@@ -177,8 +178,8 @@ function liffGetUserService(service) {
     });
 }
 
-function liffGetDkSixDofCharacteristic(characteristic) {
-    var rawDataText = document.getElementById("device-raw-data");
+function liffGetDkSixDofCharacteristic(characteristic, id) {
+    var rawDataText = document.getElementById("device-raw-data"+id);
     // Add notification hook
     characteristic.startNotifications().then(() => {
         characteristic.addEventListener('characteristicvaluechanged', e => {
