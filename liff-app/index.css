@@ -1,0 +1,57 @@
+body, table {
+  font-size: 14pt;
+  font-family: "Montserrat", sans-serif;
+  margin: 0pt;
+  text-align: center;
+  padding-top: 18pt;
+}
+
+p {
+    padding: 0pt 14pt;
+}
+
+.inactive {
+    color: #6c757d; /* Gray */
+}
+
+.success {
+    color: #16C464; /* LINE Green */
+}
+
+.error {
+    color: #dc3545; /* Red */
+}
+
+.hidden {
+    display: none;
+}
+
+.version {
+    font-size: 8pt;
+    text-align: center;
+    color: gray;
+}
+
+.device-info-table {
+    width: 80%;
+    margin: auto;
+    padding: 0;
+}
+
+.device-info-cell {
+    text-align: left;
+    vertical-align: middle;
+    padding-bottom: 8px;
+}
+
+.device-info-key {
+    padding-right: 10px;
+    word-wrap: none;
+}
+
+.device-info-val {
+    padding-left: 10px;
+    word-wrap: break-word;
+    max-width: 200px;
+    font-family: monospace, monospace;
+}

@@ -52,26 +52,6 @@ function uiToggleLoadingAnimation2(isLoading) {
     }
 }
 
-function uiStatusError2(message, showLoadingAnimation) {
-    uiToggleLoadingAnimation2(showLoadingAnimation);
-
-    const elStatus = document.getElementById("status2");
-    const elControls = document.getElementById("controls2");
-
-    // Show status error
-    elStatus.classList.remove("success");
-    elStatus.classList.remove("inactive");
-    elStatus.classList.add("error");
-    elStatus.innerText = message;
-
-    // Hide controls
-    elControls.classList.add("hidden");
-}
-
-function makeErrorMsg2(errorObj) {
-    return "Error\n" + errorObj.code + "\n" + errorObj.message;
-}
-
 // -------------- //
 // LIFF functions //
 // -------------- //
@@ -84,11 +64,11 @@ function liffCheckAvailablityAndDo2(callbackIfAvailable2) {
             uiToggleDeviceConnected2(false);
             callbackIfAvailable2();
         } else {
-            uiStatusError2("Bluetooth not available", true);
+            uiStatusError("Bluetooth not available", true);
             setTimeout(() => liffCheckAvailablityAndDo2(callbackIfAvailable2), 10000);
         }
     }).catch(error => {
-        uiStatusError2(makeErrorMsg2(error), false);
+        uiStatusError(makeErrorMsg(error), false);
     });
 }
 
@@ -97,7 +77,7 @@ function liffRequestDevice2() {
     liff.bluetooth.requestDevice().then(device => {
         liffConnectToDevice2(device);
     }).catch(error => {
-        uiStatusError2(makeErrorMsg2(error), false);
+        uiStatusError(makeErrorMsg(error), false);
     });
 }
 
@@ -114,7 +94,7 @@ function liffConnectToDevice2(device) {
         device.gatt.getPrimaryService(GattService.DailyKnee.UUID).then(service => {
             liffGetUserService2(service);
         }).catch(error => {
-            uiStatusError2(makeErrorMsg2(error), false);
+            uiStatusError(makeErrorMsg(error), false);
         });
 
         // Device disconnect callback
@@ -133,7 +113,7 @@ function liffConnectToDevice2(device) {
 
         device.addEventListener('gattserverdisconnected', disconnectCallback2);
     }).catch(error => {
-        uiStatusError2(makeErrorMsg2(error), false);
+        uiStatusError(makeErrorMsg(error), false);
     });
 }
 
@@ -142,7 +122,7 @@ function liffGetUserService2(service) {
     service.getCharacteristic(GattCharacteristic.DK_Six_Dof.UUID).then(characteristic => {
         liffGetDkSixDofCharacteristic2(characteristic);
     }).catch(error => {
-        uiStatusError2(makeErrorMsg2(error), false);
+        uiStatusError(makeErrorMsg(error), false);
     });
 }
 
@@ -157,6 +137,6 @@ function liffGetDkSixDofCharacteristic2(characteristic) {
             //TODO: real data not extracted yet.
         });
     }).catch(error => {
-        uiStatusError2(makeErrorMsg2(error), false);
+        uiStatusError(makeErrorMsg(error), false);
     });
 }
