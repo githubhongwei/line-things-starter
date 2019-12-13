@@ -1,24 +1,3 @@
-// Data
-const GattService = {
-    DailyKnee: { UUID: '0273d730-0736-42db-917a-0369eebd174d' },
-    DK_DeviceId: { UUID: 'E625601E-9E55-4597-A598-76018A0D293D' }   //TODO: usage?
-}
-
-const GattCharacteristic = {
-    DK_Six_Dof: { UUID: '02730003-0736-42db-917a-0369eebd174d' },
-    DK_Rotation_Vector: { UUID: '02730004-0736-42db-917a-0369eebd174d' },
-    DK_DeviceId: { UUID: '26E2B12B-85F0-4F3F-9FDD-91D114270E6E' }   //TODO: usage?
-}
-
-// -------------- //
-// On window load //
-// -------------- //
-
-window.onload = () => {
-    initializeApp();
-	// initializeApp2();
-};
-
 // ----------------- //
 // Handler functions //
 // ----------------- //
@@ -72,42 +51,9 @@ function uiToggleLoadingAnimation(isLoading) {
     }
 }
 
-function uiStatusError(message, showLoadingAnimation) {
-    uiToggleLoadingAnimation(showLoadingAnimation);
-
-    const elStatus = document.getElementById("status");
-    const elControls = document.getElementById("controls");
-
-    // Show status error
-    elStatus.classList.remove("success");
-    elStatus.classList.remove("inactive");
-    elStatus.classList.add("error");
-    elStatus.innerText = message;
-
-    // Hide controls
-    elControls.classList.add("hidden");
-}
-
-function makeErrorMsg(errorObj) {
-    return "Error\n" + errorObj.code + "\n" + errorObj.message;
-}
-
 // -------------- //
 // LIFF functions //
 // -------------- //
-
-function initializeApp() {
-    liff.init(() => initializeLiff(), error => uiStatusError(makeErrorMsg(error), false));
-}
-
-function initializeLiff() {
-    liff.initPlugins(['bluetooth']).then(() => {
-        liffCheckAvailablityAndDo(() => liffRequestDevice());
-        liffCheckAvailablityAndDo2(() => liffRequestDevice2());
-    }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
-    });
-}
 
 function liffCheckAvailablityAndDo(callbackIfAvailable) {
     // Check Bluetooth availability
