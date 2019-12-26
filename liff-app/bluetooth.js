@@ -15,9 +15,9 @@ function extractSixDofData(bytes) {
 
     return {
         timestamp: bytes[0] << 8 + bytes[1],
-        accX: (bytes[2] << 8 + bytes[3]) / ACC_CONST,
-        accY: (bytes[4] << 8 + bytes[5]) / ACC_CONST,
-        accZ: (bytes[6] << 8 + bytes[7]) / ACC_CONST,
+        accX: (bytes[3] << 8 + bytes[2]) / ACC_CONST,
+        accY: (bytes[5] << 8 + bytes[4]) / ACC_CONST,
+        accZ: (bytes[7] << 8 + bytes[6]) / ACC_CONST,
         gyroX: (bytes[8] << 8 + bytes[9]) / GYRO_CONST,
         gyroY: (bytes[10] << 8 + bytes[11]) / GYRO_CONST,
         gyroZ: (bytes[12] << 8 + bytes[13]) / GYRO_CONST,
