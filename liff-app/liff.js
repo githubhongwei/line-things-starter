@@ -131,8 +131,7 @@ function liffGetDkSixDofCharacteristic(characteristic) {
     characteristic.startNotifications().then(() => {
         characteristic.addEventListener('characteristicvaluechanged', e => {
             const bytes = new Uint8Array(e.target.value.buffer);
-            const data = extractSixDofData(bytes);
-            rawDataText.innerText = JSON.stringify(data, null, 2);
+            rawDataText.innerText = bytes.map(v => v.toString()).join(', ');
 
             //TODO: real data not extracted yet.
         });

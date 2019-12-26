@@ -9,6 +9,7 @@ const GattCharacteristic = {
     DK_DeviceId: { UUID: '26E2B12B-85F0-4F3F-9FDD-91D114270E6E' }
 }
 
+//TODO: undone
 function extractSixDofData(bytes) {
     const ACC_CONST = 8192.0;
     const GYRO_CONST = 16.4;
