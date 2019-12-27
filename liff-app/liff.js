@@ -55,22 +55,6 @@ function uiToggleLoadingAnimation(isLoading) {
 // LIFF functions //
 // -------------- //
 
-function liffCheckAvailablityAndDo(callbackIfAvailable) {
-    // Check Bluetooth availability
-    uiChangeStatusText("Checking Bluetooth availability...");
-    liff.bluetooth.getAvailability().then(isAvailable => {
-        if (isAvailable) {
-            uiToggleDeviceConnected(false);
-            callbackIfAvailable();
-        } else {
-            uiStatusError("Bluetooth not available", true);
-            setTimeout(() => liffCheckAvailablityAndDo(callbackIfAvailable), 10000);
-        }
-    }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
-    });
-}
-
 function liffRequestDevice() {
     uiChangeStatusText("Requesting device...");
     liff.bluetooth.requestDevice().then(device => {
