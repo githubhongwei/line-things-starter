@@ -35,36 +35,13 @@ function makeErrorMsg(errorObj) {
 // -------------- //
 
 function initializeApp() {
-    liff.init(
-        () => initializeLiff(), 
-        error => uiStatusError(makeErrorMsg(error), false)
-    );
+    liff.init(() => initializeLiff(), error => uiStatusError(makeErrorMsg(error), false));
 }
 
 function initializeLiff() {
     liff.initPlugins(['bluetooth']).then(() => {
-        liffCheckAvailablityAndDo(() => {
-            liffRequestDevice();
-            liffRequestDevice2();
-        });
-    }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
-    });
-}
-
-function liffCheckAvailablityAndDo(callbackIfAvailable) {
-    // Check Bluetooth availability
-    uiChangeStatusText("Checking Bluetooth availability...");
-    uiChangeStatusText2("Checking Bluetooth availability...");
-    liff.bluetooth.getAvailability().then(isAvailable => {
-        if (isAvailable) {
-            uiToggleDeviceConnected(false);
-            uiToggleDeviceConnected2(false);
-            callbackIfAvailable();
-        } else {
-            uiStatusError("Bluetooth not available", true);
-            setTimeout(() => liffCheckAvailablityAndDo(callbackIfAvailable), 10000);
-        }
+        liffCheckAvailablityAndDo(() => liffRequestDevice());
+        liffCheckAvailablityAndDo2(() => liffRequestDevice2());
     }).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
     });
